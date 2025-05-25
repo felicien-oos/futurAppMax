@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FuturApp Mille Milliards ++</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Orbitron', sans-serif;
+      background: radial-gradient(ellipse at center, #0f0f3d 0%, #000010 100%);
+      color: #00fff7;
+      overflow-x: hidden;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 3em;
+      margin-top: 2rem;
+      text-shadow: 0 0 20px #00fff7;
+    }
+
+    .button-container {
+      margin-top: 3rem;
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .futur-button {
+      padding: 1em 2em;
+      border: none;
+      border-radius: 50px;
+      background: linear-gradient(135deg, #00fff7, #8800ff);
+      color: #000;
+      font-weight: bold;
+      font-size: 1.2em;
+      cursor: pointer;
+      transition: all 0.4s ease;
+      box-shadow: 0 0 15px #00fff7;
+    }
+
+    .futur-button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 25px #ff00c8;
+    }
+
+    .page {
+      display: none;
+      opacity: 0;
+      transition: opacity 0.6s ease;
+    }
+
+    .active {
+      display: block;
+      opacity: 1;
+    }
+
+    /* Horloge circulaire */
+    .clock {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 120px;
+      height: 120px;
+      border: 6px solid #00fff7;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1em;
+      box-shadow: 0 0 20px #00fff7;
+    }
+
+    /* Planète animée */
+    .planet {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 80px;
+      background: radial-gradient(circle at 30% 30%, #00f2ff, #002255);
+      border-radius: 50%;
+      animation: orbit 20s linear infinite;
+      box-shadow: 0 0 30px #00f2ff;
+    }
+
+    @keyframes orbit {
+      0%   { transform: translateX(-50%) rotate(0deg) translateX(150px) rotate(0deg); }
+      100% { transform: translateX(-50%) rotate(360deg) translateX(150px) rotate(-360deg); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="clock" id="clock">00:00:00</div>
+  <div class="planet"></div>
+
+  <!-- PAGE D'ACCUEIL -->
+  <div id="page-home" class="page active">
+    <h1>Bienvenue dans le Futur</h1>
+    <div class="button-container">
+      <button class="futur-button" onclick="navigateTo('page-alpha')">Fonction Alpha</button>
+      <button class="futur-button" onclick="navigateTo('page-omega')">Fonction Oméga</button>
+    </div>
+  </div>
+
+  <!-- PAGE ALPHA -->
+  <div id="page-alpha" class="page">
+    <h1>Fonction Alpha activée</h1>
+    <div class="button-container">
+      <button class="futur-button" onclick="navigateTo('page-home')">Retour</button>
+      <button class="futur-button" onclick="navigateTo('page-omega')">Vers Oméga</button>
+    </div>
+  </div>
+
+  <!-- PAGE OMEGA -->
+  <div id="page-omega" class="page">
+    <h1>Fonction Oméga engagée</h1>
+    <div class="button-container">
+      <button class="futur-button" onclick="navigateTo('page-home')">Retour</button>
+      <button class="futur-button" onclick="navigateTo('page-alpha')">Vers Alpha</button>
+    </div>
+  </div>
+
+  <!-- SONS -->
+  <audio id="click-sound" src="https://cdn.pixabay.com/download/audio/2023/03/20/audio_5dcda2727f.mp3?filename=menu-click-89117.mp3"></audio>
+
+  <script>
+    const synth = window.speechSynthesis;
+    const clickSound = document.getElementById("click-sound");
+
+    function navigateTo(id) {
+      clickSound.play();
+      const message = new SpeechSynthesisUtterance("Changement d'interface");
+      message.lang = 'fr-FR';
+      message.pitch = 1.5;
+      message.rate = 1;
+      synth.cancel(); // Stop les voix précédentes
+      synth.speak(message);
+
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
+
+    // Horloge du futur
+    function updateClock() {
+      const now = new Date();
+      const h = String(now.getHours()).padStart(2, '0');
+      const m = String(now.getMinutes()).padStart(2, '0');
+      const s = String(now.getSeconds()).padStart(2, '0');
+      document.getElementById('clock').textContent = `${h}:${m}:${s}`;
+    }
+
+    setInterval(updateClock, 1000);
+    updateClock(); // première fois
+  </script>
+
+</body>
+</html>
